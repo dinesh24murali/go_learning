@@ -7,7 +7,7 @@ import "fmt"
 
 type deck []string
 
-// here "d deck" is referred to as receiver
+// here "d deck" is referred to as "receiver"
 // This is like a method to the class caled deck
 func (d deck) print() {
 	for i, card := range d {
