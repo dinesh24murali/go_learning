@@ -11,7 +11,7 @@ import (
 type deck []string
 
 // here "d deck" is referred to as receiver
-// This is like a method to the class caled deck
+// This is like a method to the class called deck
 func (d deck) print() {
 	// naming a variable as underscore (_) will prevent go from throwing error regarding
 	// the value is not being used
@@ -35,6 +35,10 @@ func newDeck() deck {
 	return cards
 }
 
+// This is how we get a sub set of the array
+// d[0:5] - will return an array that contains the first 5 items
+// d[:5] - This is exactly the same as above
+// d[5:] - This will return all the items after index 4, not including 4
 func deal(d deck, handside int) (deck, deck) {
 	return d[:handside], d[handside:]
 }
