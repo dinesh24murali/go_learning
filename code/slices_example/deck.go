@@ -35,6 +35,10 @@ func newDeck() deck {
 	return cards
 }
 
+// This is how we get a sub set of the array
+// d[0:5] - will return an array that contains the first 5 items
+// d[:5] - This is exactly the same as above
+// d[5:] - This will return all the items after index 4, not including 4
 func deal(d deck, handside int) (deck, deck) {
 	return d[:handside], d[handside:]
 }

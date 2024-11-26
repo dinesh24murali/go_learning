@@ -6,7 +6,7 @@ GO is a pass by value language
 jimPointer := &jim
 ```
 - here we are creating a pointer to the jim variable by getting the address
-- The works different from pointers in C or C++
+- This works different from pointers in C or C++
 
 ```
 (*pointerToPerson).firstName
@@ -15,6 +15,15 @@ jimPointer := &jim
 
 ## Note:
 
+- You can print the address to a variable like the following
+```
+name := "Bill"
+fmt.Println(&name)
+```
+It will print the following output:
+```
+0xc000014270
+```
 - for some reason when I printed the pointer 
 ```
 fmt.Println("Pointer", pointerToPerson)

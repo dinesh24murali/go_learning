@@ -1,8 +1,10 @@
 package main
 
-import "fmt" // means format
+import (
+	"fmt"
 
-import "rsc.io/quote"
+	"rsc.io/quote"
+) // means format
 
 func main() {
 	fmt.Println(quote.Go())

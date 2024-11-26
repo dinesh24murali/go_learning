@@ -32,9 +32,9 @@ func main() {
 		sideLength: 10,
 	}
 	printArea(square1)
-	tirangle1 := triangle{
+	triangle1 := triangle{
 		height: 10,
 		base:   10,
 	}
-	printArea(tirangle1)
+	printArea(triangle1)
 }
