@@ -2,7 +2,8 @@ package main
 
 import "fmt"
 
-// slices can have items that are all of the same data type
+// Slices don't have fixed length
+// Internally slice uses array under the hood. It is like a struct
 func main() {
 	cards := []string{"one", newCard()}
 	// append will add an item to the slice and return a new slice
