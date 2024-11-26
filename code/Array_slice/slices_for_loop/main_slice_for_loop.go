@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-// slices can have items that are all of the saem data type
+// slices can have items that are all of the same data type
 func main() {
 	cards := []string{"one", newCard()}
 	// append will add an item to the slice and return a new slice

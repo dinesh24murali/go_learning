@@ -11,7 +11,7 @@ import (
 type deck []string
 
 // here "d deck" is referred to as receiver
-// This is like a method to the class caled deck
+// This is like a method to the class called deck
 func (d deck) print() {
 	// naming a variable as underscore (_) will prevent go from throwing error regarding
 	// the value is not being used
