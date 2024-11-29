@@ -1,0 +1,2 @@
+- type conversion from deck to string array
+- We imported "Strings" package and used the "Join" function

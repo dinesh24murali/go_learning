@@ -1,6 +1,6 @@
 package main
 
-// slices can have items that are all of the saem data type
+// pass file name
 func main() {
 	cards := newDeckFromFile("my_cards")
 	cards.print()
