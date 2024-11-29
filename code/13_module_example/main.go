@@ -1,5 +1,8 @@
 package main
 
+import "13_module_example/hello"
+
 func main() {
-	printState()
+	Printer()
+	hello.PrintState()
 }

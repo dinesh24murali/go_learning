@@ -2,6 +2,6 @@ package main
 
 import "fmt"
 
-func printState() {
-	fmt.Println("California")
+func Printer() {
+	fmt.Println("Printer")
 }
