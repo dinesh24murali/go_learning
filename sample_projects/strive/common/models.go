@@ -1,4 +1,4 @@
-package auth
+package common
 
 import (
 	"time"
@@ -60,7 +60,6 @@ type Product struct {
 	ImageUrl        *string `gorm:"default:null"`
 	CategoryID      uuid.UUID
 	Category        Category
-	SaleDetails     []SaleDetails
 }
 
 type Sale struct {

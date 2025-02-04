@@ -1,15 +1,45 @@
 package common
 
 import (
+	"fmt"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func GetDatabase() *gorm.DB {
-	dsn := "host=172.25.0.3 user=postgres password=postgres dbname=gorm_learn port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+type Database struct {
+	*gorm.DB
+}
+
+var DB *gorm.DB
+
+// Opening a database and save the reference to `Database` struct.
+func Init() *gorm.DB {
+	dsn := "host=172.18.0.2 user=postgres password=postgres dbname=strive port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		fmt.Println("db err: (Init) ", err)
 	}
-	return db
+	//db.LogMode(true)
+	DB = db
+	return DB
 }
+
+// Using this function to get a connection, you can create your connection pool here.
+func GetDB() *gorm.DB {
+	return DB
+}
+
+// import (
+// 	"gorm.io/driver/postgres"
+// 	"gorm.io/gorm"
+// )
+
+// func GetDatabase() *gorm.DB {
+// 	dsn := "host=172.18.0.2 user=postgres password=postgres dbname=strive port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+// 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+// 	if err != nil {
+// 		panic("failed to connect database")
+// 	}
+// 	return db
+// }
