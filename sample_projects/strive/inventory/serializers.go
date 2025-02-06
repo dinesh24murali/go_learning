@@ -45,3 +45,25 @@ func (p *ProductSerializer) Response() ProductResponse {
 	}
 	return user
 }
+
+func (p *ProductSerializer) ListResponse() []ProductResponse {
+	products := p.c.MustGet("products").([]common.Product)
+	response := []ProductResponse{}
+	for _, v := range products {
+		response = append(response, ProductResponse{
+			ID:              v.ID,
+			CreatedAt:       v.CreatedAt,
+			UpdatedAt:       v.UpdatedAt,
+			Name:            v.Name,
+			Description:     v.Description,
+			Stock:           v.Stock,
+			Price:           v.Price,
+			Count:           v.Count,
+			DiscountPercent: v.DiscountPercent,
+			IsAvailable:     v.IsAvailable,
+			ImageUrl:        v.ImageUrl,
+			CategoryID:      v.CategoryID,
+		})
+	}
+	return response
+}

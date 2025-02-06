@@ -8,7 +8,7 @@ import (
 )
 
 type ProductModelValidator struct {
-	Product struct {
+	Sale struct {
 		Name            string    `form:"name" json:"name" binding:"required,min=4,max=255"`
 		Description     string    `form:"description" json:"description" binding:"required,min=4,max=1000"`
 		Price           float64   `form:"price" json:"price" binding:"required,min=8,max=255"`
@@ -17,7 +17,7 @@ type ProductModelValidator struct {
 		IsAvailable     bool      `form:"is_available" json:"is_available" binding:"boolean"`
 		CategoryID      uuid.UUID `form:"category_id" json:"category_id" binding:"required,uuid"`
 	} `json:"product"`
-	productModel common.Product `json:"-"`
+	productModel common.Sale `json:"-"`
 }
 
 func (p *ProductModelValidator) Bind(c *gin.Context) error {

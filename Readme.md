@@ -2,6 +2,8 @@
 
 The `code` folder in this repo has examples from a Udemy Golang course. The `sample_projects` folder has projects I created to learn go.
 
+The `sample_projects/strive` project is perfect implementation of SOLID principles along with what we learnt from [golang-gin-realworld](https://github.com/gothinkster/golang-gin-realworld-example-app)
+
 ## Useful Resources
 
 1. Golang learning [Roadmap](https://roadmap.sh/golang)

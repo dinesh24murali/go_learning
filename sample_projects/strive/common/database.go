@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,7 +16,9 @@ var DB *gorm.DB
 
 // Opening a database and save the reference to `Database` struct.
 func Init() *gorm.DB {
-	dsn := "host=172.18.0.2 user=postgres password=postgres dbname=strive port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	envFile, _ := godotenv.Read(".env")
+
+	dsn := envFile["DB_CONNECTION_URL"]
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("db err: (Init) ", err)
