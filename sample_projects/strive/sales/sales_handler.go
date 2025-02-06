@@ -17,18 +17,19 @@ func NewSalesHandler(salesService *SalesService) *SalesHandler {
 }
 
 func (h *SalesHandler) CreateSale(c *gin.Context) {
-	var sale common.Sale
-	if err := c.ShouldBindJSON(&sale); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+	salesValidator := NewSalesValidator()
+
+	if err := salesValidator.Bind(c); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
 
-	if err := h.salesService.CreateSale(&sale); err != nil {
+	if err := h.salesService.CreateSale(&salesValidator.salesData); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create sale"})
 		return
 	}
-
-	c.JSON(http.StatusCreated, sale)
+	c.JSON(http.StatusCreated, gin.H{"message": "Sales created successfully"})
 }
 
 func (h *SalesHandler) GetSalesByUser(c *gin.Context) {

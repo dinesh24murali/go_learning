@@ -1,4 +1,4 @@
-package inventory
+package sales
 
 import (
 	"strive/common"
@@ -7,38 +7,33 @@ import (
 	"github.com/google/uuid"
 )
 
-type ProductModelValidator struct {
-	Sale struct {
-		Name            string    `form:"name" json:"name" binding:"required,min=4,max=255"`
-		Description     string    `form:"description" json:"description" binding:"required,min=4,max=1000"`
-		Price           float64   `form:"price" json:"price" binding:"required,min=8,max=255"`
-		Count           uint      `form:"count" json:"count" binding:"required,number"`
-		DiscountPercent uint8     `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
-		IsAvailable     bool      `form:"is_available" json:"is_available" binding:"boolean"`
-		CategoryID      uuid.UUID `form:"category_id" json:"category_id" binding:"required,uuid"`
-	} `json:"product"`
-	productModel common.Sale `json:"-"`
+type ProductList struct {
+	ProductID uuid.UUID `form:"product_id" json:"product_id" binding:"required,uuid"`
+	Quantity  uint      `form:"qty" json:"qty" binding:"required,number,min=1"`
 }
 
-func (p *ProductModelValidator) Bind(c *gin.Context) error {
+type SalesValidator struct {
+	Sale struct {
+		UserID       uuid.UUID      `form:"user_id" json:"user_id" binding:"required,uuid"`
+		AddressID    uuid.UUID      `form:"address_id" json:"address_id" binding:"required,uuid"`
+		SalesDetails *[]ProductList `json:"products"`
+	} `json:"sale"`
+	salesData PartialSale `json:"-"`
+}
+
+func (p *SalesValidator) Bind(c *gin.Context) error {
 	err := common.Bind(c, p)
 	if err != nil {
 		return err
 	}
-	p.productModel.Name = p.Product.Name
-	p.productModel.Description = p.Product.Description
-	p.productModel.Price = p.Product.Price
-	p.productModel.Count = p.Product.Count
-	p.productModel.DiscountPercent = p.Product.DiscountPercent
-	p.productModel.IsAvailable = p.Product.IsAvailable
-	p.productModel.CategoryID = p.Product.CategoryID
+	p.salesData.UserID = p.Sale.UserID
+	p.salesData.AddressID = p.Sale.AddressID
+	p.salesData.SalesDetails = p.Sale.SalesDetails
 
 	return nil
 }
 
-// You can put the default value of a Validator here
-func NewProductModelValidator() ProductModelValidator {
-	productModelValidator := ProductModelValidator{}
-	// productModelValidator.Product.Description ="-"
+func NewSalesValidator() SalesValidator {
+	productModelValidator := SalesValidator{}
 	return productModelValidator
 }
