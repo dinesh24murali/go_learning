@@ -15,7 +15,8 @@ type ProductModelValidator struct {
 		Count           uint      `form:"count" json:"count" binding:"required,number"`
 		DiscountPercent uint8     `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
 		IsAvailable     bool      `form:"is_available" json:"is_available" binding:"boolean"`
-		CategoryID      uuid.UUID `form:"category_id" json:"category_id" binding:"required,uuid"`
+		CategoryID      uuid.UUID `form:"category_id" json:"category_id" binding:"uuid"`
+		CategoryName    string    `form:"category_name" json:"category_name" binding:"min=4,max=255"`
 	} `json:"product"`
 	productModel common.Product `json:"-"`
 }
@@ -25,6 +26,10 @@ func (p *ProductModelValidator) Bind(c *gin.Context) error {
 	if err != nil {
 		return err
 	}
+
+	// if p.Product.CategoryID {
+
+	// }
 	p.productModel.Name = p.Product.Name
 	p.productModel.Description = p.Product.Description
 	p.productModel.Price = p.Product.Price
