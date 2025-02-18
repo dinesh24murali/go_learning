@@ -1,6 +1,7 @@
 package inventory
 
 import (
+	"errors"
 	"strive/common"
 
 	"github.com/gin-gonic/gin"
@@ -9,14 +10,14 @@ import (
 
 type ProductModelValidator struct {
 	Product struct {
-		Name            string    `form:"name" json:"name" binding:"required,min=4,max=255"`
-		Description     string    `form:"description" json:"description" binding:"required,min=4,max=1000"`
-		Price           float64   `form:"price" json:"price" binding:"required,min=8,max=255"`
-		Count           uint      `form:"count" json:"count" binding:"required,number"`
-		DiscountPercent uint8     `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
-		IsAvailable     bool      `form:"is_available" json:"is_available" binding:"boolean"`
-		CategoryID      uuid.UUID `form:"category_id" json:"category_id" binding:"uuid"`
-		CategoryName    string    `form:"category_name" json:"category_name" binding:"min=4,max=255"`
+		Name            string     `form:"name" json:"name" binding:"required,min=4,max=255"`
+		Description     string     `form:"description" json:"description" binding:"required,min=4,max=1000"`
+		Price           float64    `form:"price" json:"price" binding:"required,min=8,max=255"`
+		Count           uint       `form:"count" json:"count" binding:"required,number"`
+		DiscountPercent uint8      `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
+		IsAvailable     bool       `form:"is_available" json:"is_available" binding:"boolean"`
+		CategoryID      *uuid.UUID `form:"category_id" json:"category_id"`
+		CategoryName    string     `form:"category_name" json:"category_name" binding:"max=255"`
 	} `json:"product"`
 	productModel common.Product `json:"-"`
 }
@@ -27,16 +28,17 @@ func (p *ProductModelValidator) Bind(c *gin.Context) error {
 		return err
 	}
 
-	// if p.Product.CategoryID {
-
-	// }
+	if p.Product.CategoryID == nil && p.Product.CategoryName == "" {
+		category_err := errors.New("category details cannot be empty")
+		return category_err
+	}
 	p.productModel.Name = p.Product.Name
 	p.productModel.Description = p.Product.Description
 	p.productModel.Price = p.Product.Price
 	p.productModel.Count = p.Product.Count
 	p.productModel.DiscountPercent = p.Product.DiscountPercent
 	p.productModel.IsAvailable = p.Product.IsAvailable
-	p.productModel.CategoryID = p.Product.CategoryID
+	p.productModel.CategoryID = *p.Product.CategoryID
 
 	return nil
 }
