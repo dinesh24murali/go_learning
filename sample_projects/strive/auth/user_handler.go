@@ -31,6 +31,21 @@ func (h *UserHandler) RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
+func (h *UserHandler) UpdateUser(c *gin.Context) {
+	var user common.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.userService.RegisterUser(&user); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register user"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, user)
+}
+
 func (h *UserHandler) GetUserByEmail(c *gin.Context) {
 	email := c.Param("email")
 	user, err := h.userService.GetUserByEmail(email)

@@ -11,4 +11,4 @@ The `sample_projects/strive` project is perfect implementation of SOLID principl
 3. [Buffer](https://www.codingexplorations.com/blog/how-to-use-buffer-in-go-a-comprehensive-guide) in Go
 4. [Blog](https://www.geeksforgeeks.org/class-and-object-in-golang/) - How interface and struct in go replaces classes in go. GO doesn't have `class` keyword.
 5. Great article on [Mutex](https://www.sohamkamani.com/golang/mutex/)
-6. 
+6. [Gin validator](https://github.com/go-playground/validator)

@@ -15,6 +15,7 @@ func UserRegister(router *gin.RouterGroup) {
 	userHandler := NewUserHandler(userService)
 
 	router.POST("/", userHandler.RegisterUser)
+	router.PUT("/", userHandler.UpdateUser)
 	router.GET("/email/:email", userHandler.GetUserByEmail)
 	router.GET("/phone/:phone", userHandler.GetUserByEmail)
 }

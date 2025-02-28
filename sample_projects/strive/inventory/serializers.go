@@ -29,7 +29,7 @@ type ProductResponse struct {
 
 func (p *ProductSerializer) Response() ProductResponse {
 	productModel := p.c.MustGet("product_model").(common.Product)
-	user := ProductResponse{
+	product := ProductResponse{
 		ID:              productModel.ID,
 		CreatedAt:       productModel.CreatedAt,
 		UpdatedAt:       productModel.UpdatedAt,
@@ -43,7 +43,7 @@ func (p *ProductSerializer) Response() ProductResponse {
 		ImageUrl:        productModel.ImageUrl,
 		CategoryID:      productModel.CategoryID,
 	}
-	return user
+	return product
 }
 
 func (p *ProductSerializer) ListResponse() []ProductResponse {

@@ -17,12 +17,14 @@ func SetupApp() {
 
 	r := gin.Default()
 
+	common.RegisterValidators()
+
 	envFile, _ := godotenv.Read(".env")
 
 	v1 := r.Group("/api")
 
 	inventory.ProductRegister(v1.Group("/product"))
-	auth.UserRegister(v1.Group("/users"))
+	auth.UserRegister(v1.Group("/user"))
 	auth.AddressRegister(v1.Group("/addresses"))
 	sales.SalesRegister(v1.Group("/sales"))
 
