@@ -30,4 +30,5 @@ func AddressRegister(router *gin.RouterGroup) {
 
 	router.POST("/", addressHandler.AddAddress)
 	router.GET("/user/:userID", addressHandler.GetAddressesByUser)
+	router.PUT("/address/:id", addressHandler.UpdateAddress)
 }

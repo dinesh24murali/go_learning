@@ -34,7 +34,7 @@ type Address struct {
 	Phone        string    `gorm:"column:phone"`
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
-	UserID       uuid.UUID
+	UserID       uuid.UUID `gorm:"column:user_id"`
 	Sales        []Sale
 }
 

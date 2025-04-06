@@ -19,3 +19,7 @@ func (s *AddressService) AddAddress(address *common.Address) error {
 func (s *AddressService) GetAddressesByUser(userID string) ([]common.Address, error) {
 	return s.repo.FindByUserID(userID)
 }
+
+func (s *AddressService) UpdateAddress(addressID string, address *common.Address) error {
+	return s.repo.UpdatePartialByID(addressID, address)
+}

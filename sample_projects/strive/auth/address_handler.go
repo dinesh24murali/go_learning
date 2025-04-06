@@ -41,3 +41,19 @@ func (h *AddressHandler) GetAddressesByUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, addresses)
 }
+
+func (h *AddressHandler) UpdateAddress(c *gin.Context) {
+	var address common.Address
+	if err := c.ShouldBindJSON(&address); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	addressID := c.Param("id")
+	if err := h.addressService.UpdateAddress(addressID, &address); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update address"})
+		return
+	}
+
+	c.JSON(http.StatusOK, address)
+}

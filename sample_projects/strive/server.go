@@ -25,7 +25,7 @@ func SetupApp() {
 
 	inventory.ProductRegister(v1.Group("/product"))
 	auth.UserRegister(v1.Group("/user"))
-	auth.AddressRegister(v1.Group("/addresses"))
+	auth.AddressRegister(v1.Group("/address"))
 	sales.SalesRegister(v1.Group("/sales"))
 
 	r.Run(":" + envFile["PORT"])
