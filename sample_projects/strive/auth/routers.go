@@ -14,7 +14,7 @@ func AuthRegister(router *gin.RouterGroup) {
 	userService := NewUserService(userRepo)
 	userHandler := NewUserHandler(userService)
 
-	router.POST("/login", userHandler.LoginUser)
+	router.POST("/login", userHandler.Login)
 	router.POST("/register", userHandler.RegisterUser)
 }
 

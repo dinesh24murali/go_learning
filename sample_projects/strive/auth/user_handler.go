@@ -72,15 +72,15 @@ func (h *UserHandler) GetUserByPhone(c *gin.Context) {
 }
 
 func (h *UserHandler) Login(c *gin.Context) {
+	var loginDto LoginUserDto
+	if err := c.ShouldBindJSON(&loginDto); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	// @todo work from here
-	user, err := h.userService.GetUserByEmail("email@maildrop.com")
-	// ... validate credentials ...
-
-	// Generate JWT token
-	token, err := common.GenerateJWT(user.ID, user.Role)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+	user, token := h.userService.LoginUser(loginDto)
+	if user == nil || token == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 	userSerializer := UserSerializer{C: c, User: *user}

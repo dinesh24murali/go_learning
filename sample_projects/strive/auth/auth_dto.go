@@ -11,3 +11,8 @@ type UpdateUserDto struct {
 	LastName  string
 	Status    uint
 }
+
+type LoginUserDto struct {
+	Email    string
+	Password string
+}

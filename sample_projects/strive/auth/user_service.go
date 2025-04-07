@@ -28,8 +28,23 @@ func (s *UserService) GetUserByEmail(email string) (*common.User, error) {
 	return s.repo.FindByEmail(email)
 }
 
-func (s *UserService) LoginUser(email string, phone string, password string) (*common.User, error) {
-	return s.repo.FindByEmail(email)
+func (s *UserService) LoginUser(loginDto LoginUserDto) (*common.User, *string) {
+
+	user, err := s.GetUserByEmail(loginDto.Email)
+	if err != nil {
+		return nil, nil
+	}
+
+	if user.Password != loginDto.Password {
+		return nil, nil
+	}
+
+	token, err := common.GenerateJWT(user.ID, user.Role)
+	if err != nil {
+		return nil, nil
+	}
+
+	return user, &token
 }
 
 func (s *UserService) GetUserByPhone(phone string) (*common.User, error) {
