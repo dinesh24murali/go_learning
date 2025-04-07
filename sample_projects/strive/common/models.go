@@ -10,10 +10,10 @@ type User struct {
 	ID                uuid.UUID  `gorm:"type:uuid;default:gen_random_uuid()"`
 	FirstName         string     `gorm:"column:first_name"`
 	LastName          string     `gorm:"column:last_name"`
-	Email             string     `gorm:"column:email;unique_index"`
-	Phone             string     `gorm:"column:phone;unique_index"`
+	Email             string     `gorm:"column:email;unique"`
+	Phone             string     `gorm:"column:phone;unique"`
 	Image             *string    `gorm:"column:image;default:null"`
-	Password          *string    `gorm:"column:password"`
+	Password          string     `gorm:"column:password"`
 	Status            UserStatus `gorm:"column:status;not null;default:0"`
 	Role              UserRole   `gorm:"column:role;not null;default:0"`
 	RefreshToken      *string    `gorm:"column:refresh_token;default:null"`

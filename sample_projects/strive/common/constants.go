@@ -27,13 +27,13 @@ func (ss UserStatus) String() string {
 type UserRole uint8
 
 const (
-	Admin UserRole = iota
-	Customer
+	AdminRole UserRole = iota
+	CustomerRole
 )
 
 var roleName = map[UserRole]string{
-	Admin:    "admin",
-	Customer: "customer",
+	AdminRole:    "admin",
+	CustomerRole: "customer",
 }
 
 func (ss UserRole) String() string {

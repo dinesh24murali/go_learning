@@ -25,6 +25,15 @@ func (r *UserRepository) FindByEmail(email string) (*common.User, error) {
 	return &user, nil
 }
 
+func (r *UserRepository) FindByEmailAndPassword(email, password string) (*common.User, error) {
+	var user common.User
+	err := r.Db.Where("email = ? AND password = ?", email, password).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func (r *UserRepository) FindByPhone(phone string) (*common.User, error) {
 	var user common.User
 	err := r.Db.Where("phone = ?", phone).First(&user).Error

@@ -7,8 +7,9 @@ import (
 	"github.com/google/uuid"
 )
 
-type AuthSerializer struct {
-	c *gin.Context
+type UserSerializer struct {
+	C    *gin.Context
+	User common.User
 }
 
 type MeResponse struct {
@@ -21,8 +22,8 @@ type MeResponse struct {
 	Status    common.UserStatus `json:"status"`
 }
 
-func (a *AuthSerializer) UserResponse() MeResponse {
-	userModel := a.c.MustGet("user_model").(common.User)
+func (a *UserSerializer) UserResponse() MeResponse {
+	userModel := a.User
 	user := MeResponse{
 		ID:        userModel.ID,
 		FirstName: userModel.FirstName,
