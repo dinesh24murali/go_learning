@@ -24,6 +24,10 @@ func (s *UserService) UpdateUser(user *common.User) error {
 	return s.repo.Create(user)
 }
 
+func (s *UserService) GetUserById(ID string) (*common.User, error) {
+	return s.repo.FindByID(ID)
+}
+
 func (s *UserService) GetUserByEmail(email string) (*common.User, error) {
 	return s.repo.FindByEmail(email)
 }

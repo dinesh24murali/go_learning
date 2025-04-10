@@ -30,10 +30,10 @@ func SetupApp() {
 	protected := v1.Group("")
 	protected.Use(common.AuthMiddleware())
 	{
-		inventory.ProductRegister(v1.Group("/product"))
-		auth.UserRegister(v1.Group("/user"))
-		auth.AddressRegister(v1.Group("/address"))
-		sales.SalesRegister(v1.Group("/sales"))
+		inventory.ProductRegister(protected.Group("/product"))
+		auth.UserRegister(protected.Group("/user"))
+		auth.AddressRegister(protected.Group("/address"))
+		sales.SalesRegister(protected.Group("/sales"))
 	}
 
 	// Admin-only routes

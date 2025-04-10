@@ -46,6 +46,6 @@ func (r *GormRepository[T]) UpdatePartialByID(id string, entity *T) error {
 	return r.Db.Model(entity).Where("id = ?", id).Updates(entity).Error
 }
 
-func (r *GormRepository[T]) Delete(id string) error {
+func (r *GormRepository[T]) DeleteByID(id string) error {
 	return r.Db.Delete(new(T), "id = ?", id).Error
 }

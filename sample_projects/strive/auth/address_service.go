@@ -23,3 +23,7 @@ func (s *AddressService) GetAddressesByUser(userID string) ([]common.Address, er
 func (s *AddressService) UpdateAddress(addressID string, address *common.Address) error {
 	return s.repo.UpdatePartialByID(addressID, address)
 }
+
+func (s *AddressService) DeleteAddress(addressID string) error {
+	return s.repo.DeleteByID(addressID)
+}

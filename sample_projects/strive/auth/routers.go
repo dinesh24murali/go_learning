@@ -27,7 +27,7 @@ func UserRegister(router *gin.RouterGroup) {
 	userHandler := NewUserHandler(userService)
 
 	router.PUT("/", userHandler.UpdateUser)
-	router.GET("/email/:email", userHandler.GetUserByEmail)
+	router.GET("/me", userHandler.GetUser)
 	router.GET("/phone/:phone", userHandler.GetUserByPhone)
 }
 
@@ -42,4 +42,5 @@ func AddressRegister(router *gin.RouterGroup) {
 	router.POST("/", addressHandler.AddAddress)
 	router.GET("/user/:userID", addressHandler.GetAddressesByUser)
 	router.PUT("/address/:id", addressHandler.UpdateAddress)
+	router.DELETE("/address/:id", addressHandler.UpdateAddress)
 }

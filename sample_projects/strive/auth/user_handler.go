@@ -46,9 +46,10 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
-func (h *UserHandler) GetUserByEmail(c *gin.Context) {
-	email := c.Param("email")
-	user, err := h.userService.GetUserByEmail(email)
+func (h *UserHandler) GetUser(c *gin.Context) {
+	userID, _ := c.Get("userID")
+	userIDString, _ := userID.(string)
+	user, err := h.userService.GetUserById(userIDString)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
