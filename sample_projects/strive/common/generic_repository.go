@@ -6,6 +6,7 @@ type Repository[T any] interface {
 	Create(entity *T) error
 	FindAll() ([]T, error)
 	FindByID(id string) (*T, error)
+	FindByIDs(ids []string) ([]T, error)
 	Update(entity *T) error
 	UpdatePartialByID(id string, entity *T) error
 	Delete(id string) error
@@ -36,6 +37,15 @@ func (r *GormRepository[T]) FindByID(id string) (*T, error) {
 		return nil, err
 	}
 	return &entity, nil
+}
+
+func (r *GormRepository[T]) FindByIDs(ids []string) ([]T, error) {
+	var entities []T
+	err := r.Db.Find(&entities, "id IN ?", ids).Error
+	if err != nil {
+		return nil, err
+	}
+	return entities, nil
 }
 
 func (r *GormRepository[T]) Update(entity *T) error {

@@ -9,14 +9,13 @@ import (
 
 type ProductList struct {
 	ProductID uuid.UUID `form:"product_id" json:"product_id" binding:"required,uuid"`
-	Quantity  uint      `form:"qty" json:"qty" binding:"required,number,min=1"`
+	Quantity  int       `form:"qty" json:"qty" binding:"required,gte=1"`
 }
 
 type SalesValidator struct {
 	Sale struct {
-		UserID       uuid.UUID      `form:"user_id" json:"user_id" binding:"required,uuid"`
-		AddressID    uuid.UUID      `form:"address_id" json:"address_id" binding:"required,uuid"`
-		SalesDetails *[]ProductList `json:"products"`
+		AddressID    uuid.UUID     `form:"address_id" json:"address_id" binding:"required,uuid"`
+		SalesDetails []ProductList `json:"products" binding:"required,dive"`
 	} `json:"sale"`
 	salesData PartialSale `json:"-"`
 }
@@ -26,7 +25,8 @@ func (p *SalesValidator) Bind(c *gin.Context) error {
 	if err != nil {
 		return err
 	}
-	p.salesData.UserID = p.Sale.UserID
+	userID, _ := c.Get("userID")
+	p.salesData.UserID = uuid.MustParse(userID.(string))
 	p.salesData.AddressID = p.Sale.AddressID
 	p.salesData.SalesDetails = p.Sale.SalesDetails
 

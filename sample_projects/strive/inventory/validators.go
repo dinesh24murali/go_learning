@@ -10,14 +10,13 @@ import (
 
 type ProductModelValidator struct {
 	Product struct {
-		Name            string     `form:"name" json:"name" binding:"required,min=4,max=255"`
-		Description     string     `form:"description" json:"description" binding:"required,min=4,max=1000"`
-		Price           float64    `form:"price" json:"price" binding:"required,min=8,max=255"`
-		Count           uint       `form:"count" json:"count" binding:"required,number"`
-		DiscountPercent uint8      `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
-		IsAvailable     bool       `form:"is_available" json:"is_available" binding:"boolean"`
-		CategoryID      *uuid.UUID `form:"category_id" json:"category_id"`
-		CategoryName    string     `form:"category_name" json:"category_name" binding:"max=255"`
+		Name            string  `form:"name" json:"name" binding:"required,min=4,max=255"`
+		Description     string  `form:"description" json:"description" binding:"required,min=4,max=1000"`
+		Price           float64 `form:"price" json:"price" binding:"required,min=8,max=255"`
+		Count           uint    `form:"count" json:"count" binding:"required,number"`
+		DiscountPercent uint8   `form:"discount_percent" json:"discount_percent" binding:"number,min=0,max=100"`
+		IsAvailable     bool    `form:"is_available" json:"is_available" binding:"boolean"`
+		CategoryID      string  `form:"category_id" json:"category_id" binding:"required"`
 	} `json:"product"`
 	productModel common.Product `json:"-"`
 }
@@ -27,10 +26,9 @@ func (p *ProductModelValidator) Bind(c *gin.Context) error {
 	if err != nil {
 		return err
 	}
-
-	if p.Product.CategoryID == nil && p.Product.CategoryName == "" {
-		category_err := errors.New("category details cannot be empty")
-		return category_err
+	catID, err := uuid.Parse(p.Product.CategoryID)
+	if err != nil {
+		return errors.New("Category details cannot be empty")
 	}
 	p.productModel.Name = p.Product.Name
 	p.productModel.Description = p.Product.Description
@@ -38,7 +36,7 @@ func (p *ProductModelValidator) Bind(c *gin.Context) error {
 	p.productModel.Count = p.Product.Count
 	p.productModel.DiscountPercent = p.Product.DiscountPercent
 	p.productModel.IsAvailable = p.Product.IsAvailable
-	p.productModel.CategoryID = *p.Product.CategoryID
+	p.productModel.CategoryID = catID
 
 	return nil
 }

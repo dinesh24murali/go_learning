@@ -4,9 +4,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
+	gorm.Model
 	ID                uuid.UUID  `gorm:"type:uuid;default:gen_random_uuid()"`
 	FirstName         string     `gorm:"column:first_name"`
 	LastName          string     `gorm:"column:last_name"`
@@ -25,6 +27,7 @@ type User struct {
 }
 
 type Address struct {
+	gorm.Model
 	ID           uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
 	AddressLine1 string    `gorm:"column:address_line1"`
 	AddressLine2 string    `gorm:"column:address_line2;default:null"`
@@ -39,6 +42,7 @@ type Address struct {
 }
 
 type Category struct {
+	gorm.Model
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
@@ -47,12 +51,13 @@ type Category struct {
 }
 
 type Product struct {
+	gorm.Model
 	ID              uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
-	Name            string `gorm:"column:name"`
-	Description     string `gorm:"column:description"`
-	Stock           uint
+	Name            string  `gorm:"column:name"`
+	Description     string  `gorm:"column:description"`
+	Stock           uint    `gorm:"default:0"`
 	Price           float64 `gorm:"type:decimal(10,2);check:price >= 0;not null;default:0"`
 	Count           uint    `gorm:"default:1"`
 	DiscountPercent uint8   `gorm:"default:0"`
@@ -63,29 +68,31 @@ type Product struct {
 }
 
 type Sale struct {
+	gorm.Model
 	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
 	CreatedAt        time.Time
 	UpdatedAt        time.Time
 	UserID           uuid.UUID
-	User             User
+	User             User `gorm:"foreignKey:UserID"`
 	AddressID        uuid.UUID
-	Address          Address
+	Address          Address `gorm:"foreignKey:AddressID"`
 	Date             time.Time
 	DiscountAmount   uint `gorm:"default:0"`
 	PackagingCharges uint `gorm:"default:0"`
 	InvoiceNetAmount uint
 	Tax              uint
-	Status           SalesStatus `gorm:"default:0"`
-	SaleDetails      []SaleDetails
+	Status           SalesStatus   `gorm:"default:0"`
+	SaleDetails      []SaleDetails `gorm:"foreignKey:SaleID;references:ID"`
 }
 
 type SaleDetails struct {
+	gorm.Model
 	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	SaleID    uuid.UUID
-	Sale      Sale
+	Sale      Sale `gorm:"foreignKey:SaleID;references:ID"`
 	ProductID uuid.UUID
-	Product   Product
-	Quantity  uint
+	Product   Product `gorm:"foreignKey:ProductID"`
+	Quantity  int
 }
