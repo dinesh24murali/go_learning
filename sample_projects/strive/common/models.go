@@ -62,6 +62,7 @@ type Product struct {
 	Count           uint    `gorm:"default:1"`
 	DiscountPercent uint8   `gorm:"default:0"`
 	IsAvailable     bool    `gorm:"default:true"`
+	IsDeleted       bool    `gorm:"column:is_deleted;default:false"`
 	ImageUrl        *string `gorm:"default:null"`
 	CategoryID      uuid.UUID
 	Category        Category

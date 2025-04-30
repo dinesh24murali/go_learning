@@ -26,7 +26,7 @@ func (r *GormRepository[T]) Create(entity *T) error {
 
 func (r *GormRepository[T]) FindAll() ([]T, error) {
 	var entities []T
-	err := r.Db.Find(&entities).Error
+	err := r.Db.Find(&entities, "is_deleted = ?", false).Error
 	return entities, err
 }
 

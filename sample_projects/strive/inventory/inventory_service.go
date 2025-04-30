@@ -16,6 +16,10 @@ func (s *ProductService) CreateProduct(product *common.Product) error {
 	return s.repo.Create(product)
 }
 
+func (s *ProductService) UpdateProduct(id string, product *common.Product) error {
+	return s.repo.UpdatePartialByID(id, product)
+}
+
 func (s *ProductService) GetAllProducts() ([]common.Product, error) {
 	return s.repo.FindAll()
 }
