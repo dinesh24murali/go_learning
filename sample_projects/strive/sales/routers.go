@@ -16,8 +16,9 @@ func SalesRegister(router *gin.RouterGroup) {
 	salesRepo := NewSalesRepository(db)
 	userRepo := auth.NewUserRepository(db)
 	addressRepo := auth.NewAddressRepository(db)
+	salesAddressRepo := NewSalesAddressRepository(db)
 	productRepo := inventory.NewProductRepository(db)
-	salesService := NewSalesService(salesRepo, userRepo, addressRepo, productRepo, emailService)
+	salesService := NewSalesService(salesRepo, userRepo, addressRepo, salesAddressRepo, productRepo, emailService)
 	salesHandler := NewSalesHandler(salesService)
 
 	router.POST("/", salesHandler.CreateSale, salesHandler.SendEmail)

@@ -13,11 +13,12 @@ import (
 )
 
 type SalesService struct {
-	repo         *SalesRepository
-	userRepo     *auth.UserRepository
-	addressRepo  *auth.AddressRepository
-	productRepo  *inventory.ProductRepository
-	emailService *common.EmailService
+	repo             *SalesRepository
+	userRepo         *auth.UserRepository
+	addressRepo      *auth.AddressRepository
+	salesAddressRepo *SalesAddressRepository
+	productRepo      *inventory.ProductRepository
+	emailService     *common.EmailService
 }
 
 type Item struct {
@@ -44,15 +45,17 @@ func NewSalesService(
 	repo *SalesRepository,
 	userRepo *auth.UserRepository,
 	addressRepo *auth.AddressRepository,
+	salesAddressRepo *SalesAddressRepository,
 	productRepo *inventory.ProductRepository,
 	emailService *common.EmailService,
 ) *SalesService {
 	return &SalesService{
-		repo:         repo,
-		userRepo:     userRepo,
-		emailService: emailService,
-		productRepo:  productRepo,
-		addressRepo:  addressRepo,
+		repo:             repo,
+		userRepo:         userRepo,
+		emailService:     emailService,
+		productRepo:      productRepo,
+		addressRepo:      addressRepo,
+		salesAddressRepo: salesAddressRepo,
 	}
 }
 
@@ -60,20 +63,60 @@ func (s *SalesService) CreateSale(sale *PartialSale) (string, error) {
 
 	id := uuid.New()
 
+	// Fetch the address from the address repository
+	address, err := s.addressRepo.FindByID(sale.AddressID.String())
+	if err != nil {
+		return "", fmt.Errorf("error fetching address: %v", err)
+	}
+
+	// Create a new SalesAddress record by copying from Address
+	salesAddress := common.SalesAddress{
+		ID:           uuid.New(),
+		AddressLine1: address.AddressLine1,
+		AddressLine2: address.AddressLine2,
+		State:        address.State,
+		City:         address.City,
+		Pincode:      address.Pincode,
+		Phone:        address.Phone,
+		UserID:       sale.UserID,
+	}
+
+	// Save the new SalesAddress
+	if err := s.salesAddressRepo.Create(&salesAddress); err != nil {
+		return "", fmt.Errorf("error creating sales address: %v", err)
+	}
+
+	ids := []string{}
+	// Prepare product IDs
+	for _, sd := range sale.SalesDetails {
+		ids = append(ids, sd.ProductID.String())
+	}
+	// Fetch products
+	products, _ := s.productRepo.FindByIDs(ids)
+
 	salesDetail := []common.SaleDetails{}
 	for _, v := range sale.SalesDetails {
+		// Find the product by ID
+		var product common.Product
+		for _, p := range products {
+			if p.ID.String() == v.ProductID.String() {
+				product = p
+				break
+			}
+		}
 		salesDetail = append(salesDetail, common.SaleDetails{
-			SaleID:    id,
-			ProductID: v.ProductID,
-			Quantity:  v.Quantity,
+			SaleID:      id,
+			ProductID:   v.ProductID,
+			ProductName: product.Name,
+			Quantity:    v.Quantity,
 		})
 	}
 
 	payload := common.Sale{
-		ID:          id,
-		UserID:      sale.UserID,
-		AddressID:   sale.AddressID,
-		SaleDetails: salesDetail,
+		ID:             id,
+		UserID:         sale.UserID,
+		SalesAddressID: salesAddress.ID,
+		SaleDetails:    salesDetail,
 	}
 	return id.String(), s.repo.Create(&payload)
 }
@@ -154,7 +197,7 @@ func (s *SalesService) SendSalesEmail(salesID string) error {
 		return userErr
 	}
 
-	address, addressErr := s.addressRepo.FindByID(sale.AddressID.String())
+	address, addressErr := s.addressRepo.FindByID(sale.SalesAddressID.String())
 	if addressErr != nil {
 		return addressErr
 	}

@@ -68,6 +68,20 @@ type Product struct {
 	Category        Category
 }
 
+type SalesAddress struct {
+	gorm.Model
+	ID           uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
+	AddressLine1 string    `gorm:"column:address_line1"`
+	AddressLine2 string    `gorm:"column:address_line2;default:null"`
+	State        string    `gorm:"column:state"`
+	City         string    `gorm:"column:city"`
+	Pincode      string    `gorm:"column:pincode"`
+	Phone        string    `gorm:"column:phone"`
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	UserID       uuid.UUID `gorm:"column:user_id"`
+}
+
 type Sale struct {
 	gorm.Model
 	ID               uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
@@ -75,8 +89,8 @@ type Sale struct {
 	UpdatedAt        time.Time
 	UserID           uuid.UUID
 	User             User `gorm:"foreignKey:UserID"`
-	AddressID        uuid.UUID
-	Address          Address `gorm:"foreignKey:AddressID"`
+	SalesAddressID   uuid.UUID
+	SalesAddress     SalesAddress `gorm:"foreignKey:SalesAddressID"`
 	Date             time.Time
 	DiscountAmount   uint `gorm:"default:0"`
 	PackagingCharges uint `gorm:"default:0"`
@@ -88,12 +102,13 @@ type Sale struct {
 
 type SaleDetails struct {
 	gorm.Model
-	ID        uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	SaleID    uuid.UUID
-	Sale      Sale `gorm:"foreignKey:SaleID;references:ID"`
-	ProductID uuid.UUID
-	Product   Product `gorm:"foreignKey:ProductID"`
-	Quantity  int
+	ID          uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	SaleID      uuid.UUID
+	Sale        Sale `gorm:"foreignKey:SaleID;references:ID"`
+	ProductID   uuid.UUID
+	ProductName string  `gorm:"column:product_name"`
+	Product     Product `gorm:"foreignKey:ProductID"`
+	Quantity    int
 }
